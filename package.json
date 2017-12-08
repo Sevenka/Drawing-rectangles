@@ -1,7 +1,7 @@
 {
-  "name": "canvas_squares",
+  "name": "drawing-rectangles",
   "version": "1.0.0",
-  "description": "Dynamic squares drawing with vue.js",
+  "description": "Dynamic rectangles drawing with vue.js",
   "author": "Oksana Mazun <misssevenka@gmail.com>",
   "private": true,
   "scripts": {
