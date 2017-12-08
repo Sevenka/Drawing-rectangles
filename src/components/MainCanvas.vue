@@ -30,10 +30,10 @@ export default {
   },
   methods: {
     ...mapMutations([
-      'setParams',
-      'startDrawing'
+      'setParams'
     ]),
     ...mapActions([
+      'startDrawing',
       'onDrawing',
       'drawn'
     ])

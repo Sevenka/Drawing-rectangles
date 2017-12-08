@@ -6,7 +6,7 @@ const state = {
     width: 0,
     height: 0
   },
-  currentRectangle: {
+  currentRectangleCoords: {
     startX: 0,
     startY: 0
   },
@@ -22,9 +22,10 @@ const mutations = {
     state.canvasParams.width = payload.width
     state.canvasParams.height = payload.height
   },
-  startDrawing (state, payload) {
-    state.currentRectangle.startX = parseInt(payload.clientX - state.canvasParams.offsetX)
-    state.currentRectangle.startY = parseInt(payload.clientY - state.canvasParams.offsetY)
+  onStartDrawing (state, payload) {
+    // getting the current mouse position where rectangle starts
+    state.currentRectangleCoords.startX = parseInt(payload.clientX - state.canvasParams.offsetX)
+    state.currentRectangleCoords.startY = parseInt(payload.clientY - state.canvasParams.offsetY)
     // set start drawing flag
     state.isStarted = true
   },
@@ -36,10 +37,16 @@ const mutations = {
       var rects = state.drawnRectangles[i]
       context.strokeRect(rects.left, rects.top, rects.right - rects.left, rects.bottom - rects.top)
     }
+  },
+  addDrawnRectangle (state, payload) {
+    state.drawnRectangles.push(payload)
   }
 }
 
 const actions = {
+  startDrawing ({commit}, payload) {
+    commit('onStartDrawing', payload)
+  },
   onDrawing ({commit, state}, payload) {
     // return if no drawing has started
     if (!state.isStarted) {
@@ -50,22 +57,20 @@ const actions = {
     let mouseX = parseInt(payload.clientX - state.canvasParams.offsetX)
     let mouseY = parseInt(payload.clientY - state.canvasParams.offsetY)
     // calculating the rectangle height and width
-    state.currentRectangle.width = mouseX - state.currentRectangle.startX
-    state.currentRectangle.height = mouseY - state.currentRectangle.startY
     commit('drawAll')
-    context.strokeRect(state.currentRectangle.startX, state.currentRectangle.startY, mouseX - state.currentRectangle.startX, mouseY - state.currentRectangle.startY)
+    context.strokeRect(state.currentRectangleCoords.startX, state.currentRectangleCoords.startY, mouseX - state.currentRectangleCoords.startX, mouseY - state.currentRectangleCoords.startY)
   },
   drawn ({commit, state}, payload) {
     // create new rectangle
     let mouseX = parseInt(payload.clientX - state.canvasParams.offsetX)
     let mouseY = parseInt(payload.clientY - state.canvasParams.offsetY)
     let newRectangle = {
-      left: Math.min(state.currentRectangle.startX, mouseX),
-      right: Math.max(state.currentRectangle.startX, mouseX),
-      top: Math.min(state.currentRectangle.startY, mouseY),
-      bottom: Math.max(state.currentRectangle.startY, mouseY)
+      left: Math.min(state.currentRectangleCoords.startX, mouseX),
+      right: Math.max(state.currentRectangleCoords.startX, mouseX),
+      top: Math.min(state.currentRectangleCoords.startY, mouseY),
+      bottom: Math.max(state.currentRectangleCoords.startY, mouseY)
     }
-    state.drawnRectangles.push(newRectangle)
+    commit('addDrawnRectangle', newRectangle)
     commit('drawAll')
     // remove drawing flag
     state.isStarted = false
