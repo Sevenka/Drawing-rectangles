@@ -1,28 +1,17 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <HelloWorld/>
+    <h1>Put your mouse in the area below, click and drag</h1>
+    <main-canvas/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld'
+import MainCanvas from './components/MainCanvas'
 
 export default {
   name: 'app',
   components: {
-    HelloWorld
+    MainCanvas
   }
 }
 </script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
